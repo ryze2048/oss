@@ -19,3 +19,19 @@
 
 # Go workspace file
 go.work
+
+
+.idea/
+
+config.yaml
+
+logs/
+
+downloads/
+
+build.sh
+
+*.yaml
+
+*.sh
+
