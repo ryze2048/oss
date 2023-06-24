@@ -3,6 +3,7 @@ package baidu
 import (
 	"github.com/baidubce/bce-sdk-go/bce"
 	"github.com/baidubce/bce-sdk-go/services/bos"
+	"github.com/ryze2048/oss/common"
 	"io/fs"
 	"mime/multipart"
 	"net/http"
@@ -12,6 +13,9 @@ import (
 // UploadFile 文件上传
 // object 表单文件
 func (b *BaiduOSS) UploadFile(object *multipart.FileHeader) (path string, err error) {
+	if object == nil {
+		return path, common.KeyError
+	}
 	var client *bos.Client
 	if client, err = b.NewClient(); err != nil {
 		return "", err
@@ -35,6 +39,9 @@ func (b *BaiduOSS) UploadFile(object *multipart.FileHeader) (path string, err er
 // UploadLocal 本地文件上传
 // localPath 本地文件路径
 func (b *BaiduOSS) UploadLocal(localPath string) (path string, err error) {
+	if localPath == common.NULL {
+		return path, common.LocalPathError
+	}
 	var file *os.File
 	if file, err = os.Open(localPath); err != nil {
 		return "", err
@@ -62,6 +69,9 @@ func (b *BaiduOSS) UploadLocal(localPath string) (path string, err error) {
 // UploadLink 根据图片链接进行上传
 // link 链接地址 ｜ 需要一个包含后缀名的链接
 func (b *BaiduOSS) UploadLink(link string) (path string, err error) {
+	if link == common.NULL {
+		return path, common.LinkError
+	}
 	var response *http.Response
 	if response, err = http.Get(link); err != nil {
 		return "", err
