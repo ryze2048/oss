@@ -2,6 +2,7 @@ package obs
 
 import (
 	"github.com/huaweicloud/huaweicloud-sdk-go-obs/obs"
+	"github.com/ryze2048/oss/common"
 	"mime/multipart"
 	"net/http"
 )
@@ -9,6 +10,9 @@ import (
 // UploadFile 文件上传
 // object 表单文件
 func (o *Obs) UploadFile(object *multipart.FileHeader) (path string, err error) {
+	if object == nil {
+		return path, common.ObjectError
+	}
 	var client *obs.ObsClient
 	if client, err = o.NewClient(); err != nil {
 		return "", err
@@ -42,6 +46,9 @@ func (o *Obs) UploadFile(object *multipart.FileHeader) (path string, err error) 
 // UploadLocal 本地文件上传
 // localPath 本地文件路径
 func (o *Obs) UploadLocal(localPath string) (path string, err error) {
+	if localPath == common.NULL {
+		return path, common.LocalPathError
+	}
 	var client *obs.ObsClient
 	if client, err = o.NewClient(); err != nil {
 		return "", err
@@ -68,6 +75,9 @@ func (o *Obs) UploadLocal(localPath string) (path string, err error) {
 // UploadLink 根据图片链接进行上传
 // link 链接地址 ｜ 需要一个包含后缀名的链接
 func (o *Obs) UploadLink(link string) (path string, err error) {
+	if link == common.NULL {
+		return path, common.LinkError
+	}
 	var client *obs.ObsClient
 	if client, err = o.NewClient(); err != nil {
 		return "", err

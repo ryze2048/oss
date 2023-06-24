@@ -5,7 +5,7 @@ import (
 )
 
 type Obs struct {
-	Path      string `json:"path"`
+	BasePath  string `json:"base_path"`
 	Bucket    string `json:"bucket"`
 	Endpoint  string `json:"endpoint"`
 	AccessKey string `json:"access-key"`
