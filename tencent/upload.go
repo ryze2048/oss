@@ -1,6 +1,7 @@
 package tencent
 
 import (
+	"github.com/ryze2048/oss/common"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"mime/multipart"
 	"net/http"
@@ -10,6 +11,9 @@ import (
 // UploadFile 文件上传
 // object 表单文件
 func (t *TencentOSS) UploadFile(object *multipart.FileHeader) (path string, err error) {
+	if object == nil {
+		return path, common.ObjectError
+	}
 	var client *cos.Client
 	if client, err = t.NewClient(); err != nil {
 		return "", err
@@ -29,6 +33,9 @@ func (t *TencentOSS) UploadFile(object *multipart.FileHeader) (path string, err 
 // UploadLocal 本地文件上传
 // localPath 本地文件路径
 func (t *TencentOSS) UploadLocal(localPath string) (path string, err error) {
+	if localPath == common.NULL {
+		return path, common.LocalPathError
+	}
 	var client *cos.Client
 	if client, err = t.NewClient(); err != nil {
 		return "", err
@@ -48,6 +55,9 @@ func (t *TencentOSS) UploadLocal(localPath string) (path string, err error) {
 // UploadLink 根据图片链接进行上传
 // link 链接地址 ｜ 需要一个包含后缀名的链接
 func (t *TencentOSS) UploadLink(link string) (path string, err error) {
+	if link == common.NULL {
+		return path, common.LinkError
+	}
 	var response *http.Response
 	if response, err = http.Get(link); err != nil {
 		return "", err

@@ -2,6 +2,7 @@ package tencent
 
 import (
 	"context"
+	"github.com/ryze2048/oss/common"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"io"
 	"net/http"
@@ -12,6 +13,9 @@ import (
 // GetTemporaryLink 获取临时的访问链接
 // expired 单位秒
 func (t *TencentOSS) GetTemporaryLink(key string, expired int64) (path string, err error) {
+	if key == common.NULL {
+		return path, common.KeyError
+	}
 	var client *cos.Client
 	if client, err = t.NewClient(); err != nil {
 		return "", err
@@ -25,6 +29,9 @@ func (t *TencentOSS) GetTemporaryLink(key string, expired int64) (path string, e
 
 // DownloadByte 流式下载
 func (t *TencentOSS) DownloadByte(key string) (data []byte, err error) {
+	if key == common.NULL {
+		return data, common.KeyError
+	}
 	var client *cos.Client
 	if client, err = t.NewClient(); err != nil {
 		return nil, err
