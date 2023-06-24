@@ -9,8 +9,8 @@ import (
 // UploadFile 文件上传
 // object 表单文件
 func (q *Qiniu) UploadFile(object *multipart.FileHeader) (path string, err error) {
-	if path == common.NULL {
-		return path, common.KeyError
+	if object == nil {
+		return path, common.ObjectError
 	}
 	var data = q.init()
 	var file multipart.File
