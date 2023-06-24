@@ -2,6 +2,7 @@ package aliyun
 
 import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/ryze2048/oss/common"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -10,6 +11,9 @@ import (
 // UploadFile 文件上传
 // object 表单文件
 func (a *AliyunOSS) UploadFile(object *multipart.FileHeader) (path string, err error) {
+	if object == nil {
+		return "", common.ObjectError
+	}
 	var bucket *oss.Bucket
 	if bucket, err = a.NewBucket(); err != nil {
 		return "", err
@@ -31,6 +35,9 @@ func (a *AliyunOSS) UploadFile(object *multipart.FileHeader) (path string, err e
 // UploadLocal 本地文件上传
 // localPath 本地文件路径
 func (a *AliyunOSS) UploadLocal(localPath string) (path string, err error) {
+	if localPath == common.NULL {
+		return "", common.KeyError
+	}
 	var bucket *oss.Bucket
 	if bucket, err = a.NewBucket(); err != nil {
 		return "", err
@@ -52,6 +59,9 @@ func (a *AliyunOSS) UploadLocal(localPath string) (path string, err error) {
 // UploadLink 根据图片链接进行上传
 // link 链接地址 ｜ 需要一个包含后缀名的链接
 func (a *AliyunOSS) UploadLink(link string) (path string, err error) {
+	if link == common.NULL {
+		return "", common.LinkError
+	}
 	var response *http.Response
 	if response, err = http.Get(link); err != nil {
 		return "", err
