@@ -7,7 +7,7 @@ type AliyunOSS struct {
 	AccessKeyId     string `json:"access-key-id"`
 	AccessKeySecret string `json:"access-key-secret"`
 	BucketName      string `json:"bucket-name"`
-	BasePath        string `json:"base_path"` // 一级目录 | 上传的时候需要不然会报错
+	BasePath        string `json:"base_path"` // 一级目录 可以不传
 }
 
 func (a *AliyunOSS) NewClient() (client *oss.Client, err error) {

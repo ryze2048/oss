@@ -7,12 +7,9 @@ type BaiduOSS struct {
 	SecretKey        string `json:"secret_key"`
 	Endpoint         string `json:"endpoint"`
 	BucketName       string `json:"bucket-name"`
-	RedirectDisabled bool   `json:"redirect_disabled"`
-	BasePath         string `json:"base_path"`
+	RedirectDisabled bool   `json:"redirect_disabled"` // 是否关闭重定向，true关闭。
+	BasePath         string `json:"base_path"`         // 一级目录
 }
-
-// Secret Key	 94958f43103148aab2b4f9a66436d1bf
-// Access Key    ALTAK7EsV3XJpFYzG0phF1es0g
 
 func (b *BaiduOSS) NewClient() (*bos.Client, error) {
 	clientConfig := bos.BosClientConfiguration{
