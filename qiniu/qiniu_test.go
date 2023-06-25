@@ -41,7 +41,7 @@ func TestQiniu_GetTemporaryLink(t *testing.T) {
 		Ctx: ctx,
 	}
 	var path string
-	path, err = q.GetTemporaryLink("test/2023-06-20/f7d3f5a8e8008608d5430c331fb0be92.png", 360)
+	path, err = q.GetTemporaryLink("test/2023-06-25/f54f24d70d3340e0c1868729e8c15d05.png", 360)
 	if err != nil {
 		t.Error("err --> ", err)
 	}
