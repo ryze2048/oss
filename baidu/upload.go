@@ -1,6 +1,7 @@
 package baidu
 
 import (
+	"encoding/base64"
 	"github.com/baidubce/bce-sdk-go/bce"
 	"github.com/baidubce/bce-sdk-go/services/bos"
 	"github.com/ryze2048/oss/common"
@@ -89,5 +90,22 @@ func (b *BaiduOSS) UploadLink(link string) (path string, err error) {
 		return "", err
 	}
 	_, err = client.PutObject(b.BucketName, path, body, nil)
+	return path, err
+}
+
+func (b *BaiduOSS) UploadBase64(base *string, suffix string) (path string, err error) {
+	if base == nil || suffix == common.NULL {
+		return "", common.Base64Error
+	}
+	var byteInfo = make([]byte, 0)
+	if byteInfo, err = base64.StdEncoding.DecodeString(*base); err != nil {
+		return "", err
+	}
+	path = b.GetBasePath(suffix)
+	var client *bos.Client
+	if client, err = b.NewClient(); err != nil {
+		return "", err
+	}
+	_, err = client.PutObjectFromBytes(b.BucketName, path, byteInfo, nil)
 	return path, err
 }
