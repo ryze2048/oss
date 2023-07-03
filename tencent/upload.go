@@ -1,6 +1,8 @@
 package tencent
 
 import (
+	"bytes"
+	"encoding/base64"
 	"github.com/ryze2048/oss/common"
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"mime/multipart"
@@ -72,4 +74,23 @@ func (t *TencentOSS) UploadLink(link string) (path string, err error) {
 	path = t.GetResponseContentTypeSuffix(response.Header.Get("Content-Type"))
 	_, err = client.Object.Put(t.Ctx, path, response.Body, nil)
 	return path, err
+}
+
+func (t *TencentOSS) UploadBase64(base *string, suffix string) (path string, err error) {
+	if base == nil || suffix == common.NULL {
+		return "", common.Base64Error
+	}
+	var byteInfo = make([]byte, 0)
+	if byteInfo, err = base64.StdEncoding.DecodeString(*base); err != nil {
+		return "", err
+	}
+	var reader = bytes.NewReader(byteInfo)
+	path = t.GetBasePath(suffix)
+	var client *cos.Client
+	if client, err = t.NewClient(); err != nil {
+		return "", err
+	}
+	path = t.GetPath(suffix)
+	_, err = client.Object.Put(t.Ctx, path, reader, nil)
+	return "", err
 }

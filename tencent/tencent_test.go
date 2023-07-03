@@ -2,7 +2,9 @@ package tencent
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
+	"os"
 	"testing"
 )
 
@@ -67,4 +69,29 @@ func TestTencentOSS_UploadFile(t *testing.T) {
 	}
 	fmt.Println(path)
 
+}
+
+func TestTencentOSS_UploadBase64(t *testing.T) {
+	filePath := "dAmZNXqEdXTvUvSlyrPTLtvCmjCkTp.png" // 替换为你的本地文件路径
+
+	// 读取本地文件
+	fileBytes, err := os.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return
+	}
+
+	// 将文件内容转换为 Base64 字符串
+	base64String := base64.StdEncoding.EncodeToString(fileBytes)
+	fmt.Println("Base64 encoded string:", base64String)
+	var ctx = context.Background()
+	client := TencentOSS{
+		Ctx: ctx,
+	}
+
+	path, err := client.UploadBase64(&base64String, ".png")
+	if err != nil {
+		t.Error("err --> ", err)
+	}
+	fmt.Println(path)
 }
