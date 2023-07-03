@@ -8,4 +8,5 @@ var (
 	ExpiredError   error = errors.New("expired must be greater than 0")
 	LinkError      error = errors.New("link is null")
 	LocalPathError error = errors.New("local path is null")
+	Base64Error    error = errors.New("parameters is null")
 )

@@ -1,7 +1,9 @@
 package aliyun
 
 import (
+	"encoding/base64"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/qiniu/go-sdk/v7/sms/bytes"
 	"github.com/ryze2048/oss/common"
 	"mime/multipart"
 	"net/http"
@@ -78,4 +80,22 @@ func (a *AliyunOSS) UploadLink(link string) (path string, err error) {
 		return "", err
 	}
 	return path, err
+}
+
+func (a *AliyunOSS) UploadBase64(base *string, suffix string) (path string, err error) {
+	if base == nil || suffix == common.NULL {
+		return "", common.Base64Error
+	}
+
+	var byteInfo = make([]byte, 0)
+	if byteInfo, err = base64.StdEncoding.DecodeString(*base); err != nil {
+		return "", err
+	}
+	var reader = bytes.NewReader(byteInfo)
+	path = a.GetBasePath(suffix)
+	var bucket *oss.Bucket
+	if bucket, err = a.NewBucket(); err != nil {
+		return "", err
+	}
+	return path, bucket.PutObject(path, reader)
 }
