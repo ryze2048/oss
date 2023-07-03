@@ -1,6 +1,9 @@
 package qiniu
 
 import (
+	"bytes"
+	"encoding/base64"
+	"fmt"
 	"github.com/ryze2048/oss/common"
 	"mime/multipart"
 	"net/http"
@@ -57,6 +60,24 @@ func (q *Qiniu) UploadLink(link string) (path string, err error) {
 	}()
 	path = q.GetResponseContentTypeSuffix(response.Header.Get("Content-Type"))
 	if err = data.FormUploader.Put(q.Ctx, &data.PutRet, data.Token, path, response.Body, response.ContentLength, &data.PutExtra); err != nil {
+		return "", err
+	}
+	return data.PutRet.Key, nil
+}
+
+func (q *Qiniu) UploadBase64(base *string, suffix string) (path string, err error) {
+	if base == nil || suffix == common.NULL {
+		return "", common.Base64Error
+	}
+	var data = q.init()
+	var byteInfo = make([]byte, 0)
+	if byteInfo, err = base64.StdEncoding.DecodeString(*base); err != nil {
+		return "", err
+	}
+	var reader = bytes.NewReader(byteInfo)
+	path = q.GetBasePath(suffix)
+	fmt.Println("base len --> ", int64(len(*base)))
+	if err = data.FormUploader.Put(q.Ctx, &data.PutRet, data.Token, path, reader, int64(len(byteInfo)), &data.PutExtra); err != nil {
 		return "", err
 	}
 	return data.PutRet.Key, nil

@@ -13,3 +13,9 @@ func (q *Qiniu) GetPath(info string) string {
 func (q *Qiniu) GetResponseContentTypeSuffix(contentType string) string {
 	return filepath.Join(q.BasePath, time.Now().Format("2006-01-02"), fmt.Sprintf("%s%s", common.GenerateRandomFilename(16), common.GetFileExtensionToContentType(contentType)))
 }
+
+// GetBasePath
+// suffix .png|jpg....
+func (q *Qiniu) GetBasePath(suffix string) (path string) {
+	return filepath.Join(q.BasePath, time.Now().Format("2006-01-02"), fmt.Sprintf("%s%s", common.GenerateRandomFilename(16), suffix))
+}
