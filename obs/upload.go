@@ -1,7 +1,9 @@
 package obs
 
 import (
+	"encoding/base64"
 	"github.com/huaweicloud/huaweicloud-sdk-go-obs/obs"
+	"github.com/qiniu/go-sdk/v7/sms/bytes"
 	"github.com/ryze2048/oss/common"
 	"mime/multipart"
 	"net/http"
@@ -101,6 +103,37 @@ func (o *Obs) UploadLink(link string) (path string, err error) {
 			ContentType: response.Header.Get("Content-Type"),
 		},
 		Body: response.Body,
+	}
+
+	if _, err = client.PutObject(input); err != nil {
+		return "", err
+	}
+	return path, err
+}
+func (o *Obs) UploadBase64(base *string, suffix string) (path string, err error) {
+	if base == nil || suffix == common.NULL {
+		return "", common.Base64Error
+	}
+
+	var byteInfo = make([]byte, 0)
+	if byteInfo, err = base64.StdEncoding.DecodeString(*base); err != nil {
+		return "", err
+	}
+	var reader = bytes.NewReader(byteInfo)
+
+	var client *obs.ObsClient
+	if client, err = o.NewClient(); err != nil {
+		return "", err
+	}
+	path = o.GetBasePath(suffix)
+	input := &obs.PutObjectInput{
+		PutObjectBasicInput: obs.PutObjectBasicInput{
+			ObjectOperationInput: obs.ObjectOperationInput{
+				Bucket: o.Bucket,
+				Key:    path,
+			},
+		},
+		Body: reader,
 	}
 
 	if _, err = client.PutObject(input); err != nil {
