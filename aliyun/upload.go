@@ -1,9 +1,9 @@
 package aliyun
 
 import (
+	"bytes"
 	"encoding/base64"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/qiniu/go-sdk/v7/sms/bytes"
 	"github.com/ryze2048/oss/common"
 	"mime/multipart"
 	"net/http"
